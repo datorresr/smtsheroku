@@ -51,26 +51,22 @@ class VideosController < ApplicationController
 
   # POST /videos
   # POST /videos.json
-  def create
+def create
+    puts "params - create"
     puts params
-    #puts video_params
-    puts "Prueba Parametros"
-    #vid = video_params[:video_source]
-    #puts video_params[:nombre]
-    #puts video_params[:video_source]
-    #puts vid
-    #puts vid.headers
-    #puts vid.headers.filename
-    #puts vid.original_filename
-    @video = Video.new(:nombre => video_params[:nombre], :apellido => video_params[:apellido], :email => video_params[:email], :titulo => video_params[:titulo], :descripcion => video_params[:descripcion], :video_source => video_params[:video_source].original_filename)
-    @concurso = Concurso.find(video_params[:id])
+    @video = Video.new(:nombre => params[:nombre], :apellido => params[:apellido], :email => params[:email], :titulo => params[:titulo], :descripcion => params[:descripcion], :video_source => params[:video_source].original_filename)
+    concurso = params[:video]
+    concurso_id = concurso[:id]
+    puts "concurso id"
+    puts concurso_id
+    @concurso = Concurso.find(concurso_id)
     @video.concurso = @concurso
     respond_to do |format|
       if  @video.save
         uploader = VideoUploader.new
-        uploader.store!(video_params[:video_source])
+        uploader.store!(params[:video_source])
         sqs = Aws::SQS::Client.new(region: 'us-east-2')
-        body = @video.id.to_s + '-' + @concurso.id.to_s + '-' +video_params[:video_source].original_filename
+        body = @video.id.to_s + ';' + @concurso.id.to_s + ';' +params[:video_source].original_filename
         sqs.send_message(queue_url: 'https://sqs.us-east-2.amazonaws.com/893543758111/smts-videos-queue', message_body: body)
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render :show, status: :created, location: @video }
@@ -79,7 +75,7 @@ class VideosController < ApplicationController
         format.json { render json: @video.errors, status: :unprocessable_entity }
       end
     end
-  end
+end
 
   private
     # Use callbacks to share common setup or constraints between actions.
