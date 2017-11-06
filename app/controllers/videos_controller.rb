@@ -53,7 +53,9 @@ class VideosController < ApplicationController
   # POST /videos.json
   def create
     puts video_params
+	puts "Prueba Parametros"
     vid = video_params[:video_source]
+	puts video_params[:video_source]
     puts vid
     puts vid.headers
     puts vid.headers.filename
