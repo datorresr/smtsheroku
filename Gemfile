@@ -51,6 +51,10 @@ gem 'jquery-rails'
 gem 'aws-sdk', '~> 2'
 gem 'dynamoid', '~> 1'
 
+gem 'rails_autoscale_agent'
+gem 'newrelic_rpm'
+gem 'rails_12factor'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
