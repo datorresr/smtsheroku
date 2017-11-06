@@ -4,7 +4,8 @@ class ConcursosController < ApplicationController
 
   def show
     @concurso = Concurso.find(params[:id])
-    @video = Video.new
+	@video = @concurso.videos.build 
+    #@video = Video.new
     @videos = Video.all
     @vfinals = Array.new
     @videos.each { |v| s = v.concurso_ids
