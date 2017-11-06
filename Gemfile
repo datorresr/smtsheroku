@@ -8,7 +8,7 @@ end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.3'
 # Use mysql as the database for Active Record
-#gem 'mysql2', '>= 0.3.18', '< 0.5'
+gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
@@ -32,7 +32,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'bootstrap-sass', '3.3.7'
 gem 'rails-controller-testing'
-#gem 'bcrypt', '3.1.11'
+gem 'bcrypt', '3.1.11'
 gem 'faker',                   '1.7.3'
 gem 'carrierwave',             '1.1.0'
 gem 'mini_magick',             '4.7.0'
