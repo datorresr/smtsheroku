@@ -52,10 +52,26 @@ class VideosController < ApplicationController
   # POST /videos
   # POST /videos.json
 def create
-    puts "params - create"
     puts params
-    @video = Concurso.new
-    puts "done - create"
+    concurso = params[:video]
+    concurso_id = concurso[:id]
+    @concurso = Concurso.find(concurso_id)
+    @video = Video.new(:nombre => params[:nombre], :apellido => params[:apellido], :email => params[:email], :titulo => params[:titulo], :descripcion => params[:descripcion], :video_source => params[:video_source].original_filename)
+    @video.concurso = @concurso
+    respond_to do |format|
+      if  @video.save
+        uploader = VideoUploader.new
+        uploader.store!(params[:video_source])
+        sqs = Aws::SQS::Client.new(region: 'us-east-2')
+        body = @video.id.to_s + ';' + @concurso.id.to_s + ';' +params[:video_source].original_filename
+        sqs.send_message(queue_url: 'https://sqs.us-east-2.amazonaws.com/893543758111/smts-videos-queue', message_body: body)
+        format.html { redirect_to @video, notice: 'Video was successfully created.' }
+        format.json { render :show, status: :created, location: @video }
+      else
+        format.html { render :new }
+        format.json { render json: @video.errors, status: :unprocessable_entity }
+      end
+    end
 end
 
   private
