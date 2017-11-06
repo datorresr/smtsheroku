@@ -54,7 +54,7 @@ class VideosController < ApplicationController
 def create
     puts "params - create"
     puts params
-    @video = Video.new
+    @video = Concurso.new
     puts "done - create"
 end
 
