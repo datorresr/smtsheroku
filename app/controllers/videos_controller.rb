@@ -25,7 +25,7 @@ class VideosController < ApplicationController
   # GET /videos/new
   def new
     @concursos = Concurso.all
-    @video = Video.new
+    #@video = Video.new
   end
 
   # GET /videos/1/edit
