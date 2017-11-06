@@ -4,7 +4,7 @@ class ConcursosController < ApplicationController
 
   def show
     @concurso = Concurso.find(params[:id])
-    #@video = Video.new
+    @video = Video.build
     @videos = Video.all
     @vfinals = Array.new
     @videos.each { |v| s = v.concurso_ids
@@ -24,15 +24,10 @@ class ConcursosController < ApplicationController
   def create
     @concurso = Concurso.new(:nombre => concurso_params[:nombre], :imagen => concurso_params[:imagen].original_filename, :url => nil, :fechaInicio => concurso_params[:fechaInicio], :fechaFin => concurso_params[:fechaFin], :descripcion => concurso_params[:descripcion])
     @concurso.usuario = current_user
-    puts "fuck3"
-    #File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
-    #  file.write(uploaded_io.read)
-    #end
-    img = concurso_params[:imagen]
-    puts img
+
     if @concurso.save
       uploader = ImagenUploader.new
-      uploader.store!(img)
+      uploader.store!(concurso_params[:imagen])
       flash[:success] = "Concurso Creado!"
       redirect_to root_url
     else
@@ -51,8 +46,7 @@ class ConcursosController < ApplicationController
     @concurso = Concurso.find(params[:id])
   end
 
-  def update #wtf?
-    puts "actualizar"
+  def update
     @concurso = Concurso.find(params[:id])
     if @concurso.update_attributes(:nombre => concurso_params[:nombre], :imagen => concurso_params[:imagen].original_filename, :fechaInicio => concurso_params[:fechaInicio], :fechaFin => concurso_params[:fechaFin], :descripcion => concurso_params[:descripcion])
       uploader = ImagenUploader.new
@@ -64,8 +58,6 @@ class ConcursosController < ApplicationController
       render 'edit'
     end
   end
-
-
 
   private
 
