@@ -50,7 +50,7 @@ gem 'jquery-rails'
 #gem 'aws-sdk', '~> 3'
 gem 'aws-sdk', '~> 2'
 gem 'dynamoid', '~> 1'
-
+gem 'dalli'
 gem 'rails_autoscale_agent'
 gem 'newrelic_rpm'
 gem 'rails_12factor'
