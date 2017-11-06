@@ -55,6 +55,7 @@ class VideosController < ApplicationController
     puts video_params
 	puts "Prueba Parametros"
     vid = video_params[:video_source]
+	puts video_params[:nombre]
 	puts video_params[:video_source]
     puts vid
     puts vid.headers
