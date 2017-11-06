@@ -21,9 +21,19 @@ Rails.application.configure do
       'Cache-Control' => 'public, max-age=172800'
     }
   else
-    config.action_controller.perform_caching = false
-
-    config.cache_store = :null_store
+    #config.action_controller.perform_caching = false
+    #config.cache_store = :null_store
+    require 'dalli'
+    config.action_controller.perform_caching = true
+    config.cache_store = :dalli_store,
+                    (ENV["MEMCACHIER_SERVERS"] || "").split(","),
+                    {:username => ENV["MEMCACHIER_USERNAME"],
+                     :password => ENV["MEMCACHIER_PASSWORD"],
+                     :failover => true,
+                     :socket_timeout => 1.5,
+                     :socket_failure_delay => 0.2,
+                     :down_retry_delay => 60
+                    }
   end
 
   # Don't care if the mailer can't send.
