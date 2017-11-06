@@ -54,6 +54,7 @@ class VideosController < ApplicationController
   def create
     puts video_params
 	vid = video_params[:video_source]
+	puts vid
     puts vid.headers
     puts vid.headers.filename
     puts vid.original_filename
