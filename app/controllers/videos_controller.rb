@@ -53,6 +53,10 @@ class VideosController < ApplicationController
   # POST /videos.json
   def create
     puts video_params
+	vid = video_params[:video_source]
+    puts vid.headers
+    puts vid.headers.filename
+    puts vid.original_filename
     @video = Video.new(:nombre => video_params[:nombre], :apellido => video_params[:apellido], :email => video_params[:email], :titulo => video_params[:titulo], :descripcion => video_params[:descripcion], :video_source => video_params[:video_source].original_filename)
     @concurso = Concurso.find(video_params[:id])
     @video.concurso = @concurso
