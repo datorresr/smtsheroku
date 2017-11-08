@@ -30,6 +30,8 @@ class UsuariosController < ApplicationController
 
   def create
     @usuario = Usuario.new(:nombre => usuario_params[:nombre], :apellido => usuario_params[:apellido], :email => usuario_params[:email], :password_digest => usuario_params[:password], :admin => false)
+    @video = Video.new
+    @concurso = Concurso.new
     if @usuario.save
       puts @usuario.id
       log_in @usuario
