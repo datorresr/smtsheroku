@@ -1,24 +1,21 @@
-class Usuario
-  include Dynamoid::Document
-  table :name => :usuarios, :key => :id, :read_capacity => 5, :write_capacity => 5
+class Usuario < OceanDynamo::Table
 
-  field :nombre
-  field :apellido
-  field :email
-  field :password_digest
-  field :admin, :boolean
+  dynamo_schema(
+      :id,                   # The name of the hash key attribute
+      read_capacity_units: 5,                # Used only when creating a table
+      write_capacity_units: 5,                # Used only when creating a table
+      connect: :late,                         # true, :late, nil/false
+      create: true,                          # If true, create the table if nonexistent
+      timestamps: [:created_at, :updated_at]  # A two-element array of timestamp columns, or nil/false
+    ) do
+    attribute :nombre,          :string
+    attribute :apellido,        :string
+    attribute :email,           :string
+    attribute :password_digest, :string
+    attribute :admin,           :boolean,    default: false    
+  end
+  has_many :concursos, dependent: :destroy
 
-  has_many :concursos
-
-  #before_save { self.email = email.downcase }
-  #validates :nombre, presence: true, length: { maximum: 50 }
-  #validates :apellido, presence: true, length: { maximum: 50 }
-  #VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  #validates :email, presence: true, length: { maximum: 50 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  #has_secure_password
-  #validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-
- 
   def feed
     @concursos = Concurso.all
     @cfinals = Array.new
@@ -38,3 +35,4 @@ class Usuario
     BCrypt::Password.create(string, cost: cost)
   end
 end
+ 

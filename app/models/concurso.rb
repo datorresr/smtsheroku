@@ -1,31 +1,21 @@
-class Concurso
-  include Dynamoid::Document
-  table :name => :concursos, :key => :id, :read_capacity => 5, :write_capacity => 5
-  #mount_uploader :imagen, PictureUploader
+class Concurso < OceanDynamo::Table
 
-  field :nombre
-  field :imagen
-  field :url
-  field :fechaInicio
-  field :fechaFin
-  field :descripcion
-
+  dynamo_schema(
+      :id,                   # The name of the hash key attribute
+      read_capacity_units: 5,                # Used only when creating a table
+      write_capacity_units: 5,                # Used only when creating a table
+      connect: :late,                         # true, :late, nil/false
+      create: true,                          # If true, create the table if nonexistent
+      timestamps: [:created_at, :updated_at]  # A two-element array of timestamp columns, or nil/false
+    ) do
+    attribute :nombre,        :string
+    attribute :imagen,        :string
+    attribute :url,           :string
+    attribute :fechaInicio,   :datetime
+    attribute :fechaFin,      :datetime
+    attribute :descripcion,   :string  
+  end
   belongs_to :usuario
-  has_many :videos
+  has_many :videos, dependent: :destroy
 
-  #include ActiveModel::Validations
-  #validates :usuario_id, presence: true
-  #validates :descripcion, presence: true, length: { maximum: 1000 }
-
-  '''
-  def initialize(id, nombre, imagen, fechaInicio, fechaFin, descripcion, usuario)
-      @id = id
-      @nombre = nombre
-	  @imagen = imagen
-	  @fechaInicio = fechaInicio
-	  @fechaFin = fechaFin
-	  @descripcion = descripcion
-	  @usuario = usuario
-   end
-   '''
 end

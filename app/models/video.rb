@@ -1,31 +1,21 @@
-class Video
-  include Dynamoid::Document
-  table :name => :videos, :key => :id, :read_capacity => 5, :write_capacity => 5
-  #mount_uploader :video_source, VideoUploader # Tells rails to use this uploader for this model.
+class Video < OceanDynamo::Table
 
-  field :nombre
-  field :apellido
-  field :email
-  field :titulo
-  field :descripcion
-  field :video_source
-  field :estado, :boolean, {default: false}
-
-  belongs_to :concurso
-  #after_create :run_workers
-  #include ActiveModel::Validations
-  #validates :nombre, presence: true
-  #validates :apellido, presence: true
-  #validates :email, presence: true
-  #validates :titulo, presence: true
-  #validates :descripcion, presence: true
-  #validates :convirtiendo, :presence => false
-  #validates :estado, :presence => false
-  #validates :concurso_id, :presence => true
-
-  private
-
-  def run_workers
-    Mp4VideoConverter.perform_async(self.id)
+  dynamo_schema(
+      :id,                   # The name of the hash key attribute
+      read_capacity_units: 5,                # Used only when creating a table
+      write_capacity_units: 5,                # Used only when creating a table
+      connect: :late,                         # true, :late, nil/false
+      create: true,                          # If true, create the table if nonexistent
+      timestamps: [:created_at, :updated_at]  # A two-element array of timestamp columns, or nil/false
+    ) do
+    attribute :nombre,        :string
+    attribute :apellido,      :string
+    attribute :email,         :string
+    attribute :titulo,        :string
+    attribute :descripcion,   :string
+    attribute :video_source,  :string
+    attribute :estado,        :boolean,    default: false    
   end
+  belongs_to :concurso, composite_key: true
+
 end
