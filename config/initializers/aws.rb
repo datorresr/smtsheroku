@@ -17,8 +17,8 @@ end
 cfg = YAML.load(File.read(f))[Rails.env]
 
 options = {
-  region: cfg["region"],
-  credentials: Aws::Credentials.new(cfg["access_key_id"], cfg["secret_access_key"])
+  region: ENV['AWS_REGION'],
+  credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_ACCESS_KEY_ID'])
 }
 options[:endpoint] = cfg["endpoint"] if cfg["endpoint"]
 
