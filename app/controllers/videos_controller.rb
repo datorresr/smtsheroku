@@ -25,7 +25,7 @@ class VideosController < ApplicationController
   # GET /videos/new
   def new
     @concursos = Concurso.all
-    #@video = Video.new
+    @video = Video.build
   end
 
   # GET /videos/1/edit
@@ -35,7 +35,6 @@ class VideosController < ApplicationController
   end
 
   def update
-    puts "actualizar video"
     @video = Video.find(params[:id])
     @concurso = Concurso.find(video_params[:id])
     @video.concurso = @concurso
@@ -46,24 +45,21 @@ class VideosController < ApplicationController
     else
       render 'edit'
     end
-
   end
 
   # POST /videos
   # POST /videos.json
-def create
-    puts params
-    concurso = params[:video]
-    concurso_id = concurso[:id]
-    @concurso = Concurso.find(concurso_id)
-    @video = Video.new(:nombre => params[:nombre], :apellido => params[:apellido], :email => params[:email], :titulo => params[:titulo], :descripcion => params[:descripcion], :video_source => params[:video_source].original_filename)
+  def create
+    puts video_params
+    @video = Video.new(:nombre => video_params[:nombre], :apellido => video_params[:apellido], :email => video_params[:email], :titulo => video_params[:titulo], :descripcion => video_params[:descripcion], :video_source => video_params[:video_source].original_filename)
+    @concurso = Concurso.find(video_params[:id])
     @video.concurso = @concurso
     respond_to do |format|
       if  @video.save
         uploader = VideoUploader.new
-        uploader.store!(params[:video_source])
+        uploader.store!(video_params[:video_source])
         sqs = Aws::SQS::Client.new(region: 'us-east-2')
-        body = @video.id.to_s + ';' + @concurso.id.to_s + ';' +params[:video_source].original_filename
+        body = @video.id.to_s + ';' + @concurso.id.to_s + ';' +video_params[:video_source].original_filename
         sqs.send_message(queue_url: 'https://sqs.us-east-2.amazonaws.com/893543758111/smts-videos-queue', message_body: body)
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render :show, status: :created, location: @video }
@@ -72,7 +68,7 @@ def create
         format.json { render json: @video.errors, status: :unprocessable_entity }
       end
     end
-end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

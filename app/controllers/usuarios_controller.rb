@@ -4,7 +4,7 @@ class UsuariosController < ApplicationController
   before_action :logged_in_usuario, only: [:show, :index, :edit, :update, :destroy]
   before_action :correct_user,   only:  [:edit, :update]
   before_action :admin_user, only: :destroy
-  
+
   def show
     @usuario = Usuario.find(params[:usuario_id].to_s)
     @concursos = Concurso.all
@@ -60,6 +60,7 @@ class UsuariosController < ApplicationController
     flash[:success] = "Usuario Eliminado"
     redirect_to usuarios_url
   end
+
 
   private
 

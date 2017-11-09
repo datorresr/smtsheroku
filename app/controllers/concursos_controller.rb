@@ -15,16 +15,11 @@ class ConcursosController < ApplicationController
     end
     }
     @videos = @vfinals
-    #@videos = @concurso.videos #.paginate(page: params[:page])
-    #.paginate(:page => params[:page], :per_page => 2)
-    #.order(created_at: :asc)
-
   end
 
   def create
     @concurso = Concurso.new(:nombre => concurso_params[:nombre], :imagen => concurso_params[:imagen].original_filename, :url => nil, :fechaInicio => concurso_params[:fechaInicio], :fechaFin => concurso_params[:fechaFin], :descripcion => concurso_params[:descripcion])
     @concurso.usuario = current_user
-
     if @concurso.save
       uploader = ImagenUploader.new
       uploader.store!(concurso_params[:imagen])

@@ -3,7 +3,7 @@ class SesionesController < ApplicationController
   def new
   end
 
-  def create 
+  def create
     usuario = Usuario.where(:email => params[:session][:email].downcase).all
     if usuario[0] #&& usuario[0].authenticate(params[:session][:password])
       log_in usuario[0]

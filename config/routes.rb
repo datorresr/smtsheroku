@@ -20,7 +20,6 @@ Rails.application.routes.draw do
   get    '/sites/:id', to: 'concursos#show'
   post   '/sites/:id', to: 'concursos#create'
   post   '/concursos/:id', to: 'concursos#edit'
-  post   '/videos/new', to: 'videos#create'
   get   '/concursos/:id', to: 'concursos#show'
   get   '/usuarios/:usuario_id', to: 'usuarios#show'
   resources :videos
