@@ -56,7 +56,7 @@ def create
     concurso = params[:video]
     concurso_id = concurso[:id]
     @concurso = Concurso.find(concurso_id)
-    @video = Video.new(:nombre => params[:nombre], :apellido => params[:apellido], :email => params[:email], :titulo => params[:titulo], :descripcion => params[:descripcion], :video_source => params[:video_source].original_filename)
+    @video = Video.new(:nombre => params[:nombre], :apellido => params[:apellido], :email => params[:email], :titulo => params[:titulo], :descripcion => params[:descripcion], :video_source => params[:video_source])
     @video.concurso = @concurso
     respond_to do |format|
       if  @video.save
