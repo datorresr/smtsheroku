@@ -9,6 +9,7 @@ end
 gem 'rails', '~> 5.1.3'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.3.18', '< 0.5'
+gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
@@ -52,6 +53,9 @@ gem 'dalli-elasticache'
 #gem 'aws-sdk', '~> 3'
 gem 'aws-sdk', '~> 2'
 gem 'dynamoid', '~> 1'
+gem 'rails_autoscale_agent'
+gem 'newrelic_rpm'
+gem 'rails_12factor'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
