@@ -32,8 +32,8 @@ class VideosController < ApplicationController
     @video = Video.new(video_params)
     respond_to do |format|
       if @video.save
-        @ironmq = IronMQ::Client.new(host: 'mq-rackspace-ord.iron.io',token:'MY_TOKEN',project_id: 'MY_PROJECT_ID')
-        @queue = @ironmq.queue("my_queue")
+        @ironmq = IronMQ::Client.new(host: 'mq-aws-eu-west-1-1.iron.io',token:1Buw2JPnHAaxLQsrmkPj',project_id: "5a040693ab3f4b0009da54c0")
+        @queue = @ironmq.queue("smtsQueue")
         @queue.post("hello world!")
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render :show, status: :created, location: @video }
