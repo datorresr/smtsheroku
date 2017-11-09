@@ -32,9 +32,10 @@ class VideosController < ApplicationController
     @video = Video.new(video_params)
     respond_to do |format|
       if @video.save
+        message="12;32;"@video.video_source.filename
         @ironmq = IronMQ::Client.new(host: 'mq-aws-eu-west-1-1.iron.io',token:'1Buw2JPnHAaxLQsrmkPj',project_id: "5a040693ab3f4b0009da54c0")
         @queue = @ironmq.queue("smtsQueue")
-        @queue.post("hello world!")
+        @queue.post(message)
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render :show, status: :created, location: @video }
       else
