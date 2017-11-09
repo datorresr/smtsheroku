@@ -20,11 +20,6 @@ module Vagrant
         authentication:       'plain',
         enable_starttls_auto: true
     }
-    config.aws_access = {
-          access_key_id: Rails.application.secrets.aws_access_key_id,
-          secret_access_key: Rails.application.secrets.aws_secret_access_key,
-          region: Rails.application.secrets.aws_region
-    }
    # ActionMailer::Base.default_content_type = "text/html"
 
     # Settings in config/environments/* take precedence over those specified here.

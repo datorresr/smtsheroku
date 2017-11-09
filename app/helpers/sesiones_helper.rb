@@ -2,7 +2,6 @@ module SesionesHelper
 
     # Logs in the given user.
   def log_in(usuario)
-    puts usuario.id
     session[:usuario_id] = usuario.id
   end
   
@@ -21,11 +20,7 @@ module SesionesHelper
 
   # Returns the current logged-in user (if any).
   def current_user
-    if session[:usuario_id].to_s.strip.empty?
-      @current_user = nil
-    else
-      @current_user ||= Usuario.find(session[:usuario_id].to_s)
-    end    
+    @current_user ||= Usuario.find_by(id: session[:usuario_id])
   end
 
   # Returns true if the user is logged in, false otherwise.

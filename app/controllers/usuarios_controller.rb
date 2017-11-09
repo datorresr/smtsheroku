@@ -4,24 +4,14 @@ class UsuariosController < ApplicationController
   before_action :logged_in_usuario, only: [:show, :index, :edit, :update, :destroy]
   before_action :correct_user,   only:  [:edit, :update]
   before_action :admin_user, only: :destroy
-  
   def show
-    @usuario = Usuario.find(params[:usuario_id].to_s)
-    @concursos = Concurso.all
-    @cfinals = Array.new
-    puts @usuario
-    @concursos.each { |c| s = c.usuario_ids
-      s.each do |n|
-        if n == @usuario.id
-          @cfinals.push(c)
-        end
-      end
-    }    
-    @concursos = @cfinals
+    @usuario = Usuario.find(params[:id])
+    @concursos = @usuario.concursos.paginate(page: params[:page])
   end
 
   def index
-    @usuarios = Usuario.all
+    #@usuarios = Usuario.all
+    @usuarios = Usuario.paginate(page: params[:page])
   end
 
   def new
@@ -29,9 +19,8 @@ class UsuariosController < ApplicationController
   end
 
   def create
-    @usuario = Usuario.new(:nombre => usuario_params[:nombre], :apellido => usuario_params[:apellido], :email => usuario_params[:email], :password_digest => usuario_params[:password], :admin => false)
+    @usuario = Usuario.new(usuario_params)
     if @usuario.save
-      puts @usuario.id
       log_in @usuario
       flash[:success] = "Bienvenido a SmartTools!"
       redirect_to @usuario
@@ -46,7 +35,7 @@ class UsuariosController < ApplicationController
 
   def update
     @usuario = Usuario.find(params[:id])
-    if @usuario.update_attributes(:nombre => usuario_params[:nombre], :apellido => usuario_params[:apellido], :email => usuario_params[:email], :password_digest => usuario_params[:password])
+    if @usuario.update_attributes(usuario_params)
       flash[:success] = "Perfil Actualizado"
       redirect_to @usuario
       # Handle a successful update.
@@ -56,10 +45,14 @@ class UsuariosController < ApplicationController
   end
  
   def destroy
-    Usuario.find(params[:id]).delete
+    Usuario.find(params[:id]).destroy
     flash[:success] = "Usuario Eliminado"
     redirect_to usuarios_url
   end
+
+
+
+
 
   private
 
